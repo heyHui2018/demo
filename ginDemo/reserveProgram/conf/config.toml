@@ -1,0 +1,44 @@
+[server]
+runMode = "debug"
+httpPort = 8666
+readTimeout = 20
+writeTimeout = 20
+
+[log]
+path = "wechat_service_account.log"
+level = "info"
+
+[DB]
+database = "service_account"
+username = "root"
+password = "111111"
+host = "172.16.17.121:3306"
+maxOpenConn = 100
+maxIdleConn = 50
+
+[MQs]
+  [MQs.bind]
+  ip = "127.0.0.1"
+  port = "5672"
+  username = "admin"
+  password = "admin"
+  host = "/"
+  exchange = "service.account.bind.exchange"
+  key = "service.account.bind.routingKey"
+  queue = "service.account.bind.queue"
+  chanRangeNum = 20
+
+  [MQs.program]
+  ip = "127.0.0.1"
+  port = "5672"
+  username = "admin"
+  password = "admin"
+  host = "/"
+  exchange = "exchange.moretv.program"
+  key = "program.*"
+  queue = "service.account.remind.queue"
+  chanRangeNum = 20
+
+[domain]
+wechatGateWayUrl = "http://wechat.aginomoto.com"
+h5Url = "http://test-h5.tvmore.com.cn/test/wa"

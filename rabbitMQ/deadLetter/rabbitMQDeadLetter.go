@@ -1,4 +1,4 @@
-package demo
+package main
 
 import (
 	"time"
@@ -10,9 +10,9 @@ import (
 var Channel *amqp.Channel
 var Conn *amqp.Connection
 
-func Publish() {
-	exchangeName := "exchange"
-	routingKey := "routingKey"
+func main() {
+	exchangeName := "putong.exchange"
+	routingKey := "putong.routingKey"
 	MQStart(exchangeName, routingKey)
 
 	msg := `{"msg":"hello world!"}`
@@ -20,14 +20,14 @@ func Publish() {
 	retryCount := 0
 retry:
 	if Channel == nil {
-		MqConnect()
+		Connect()
 	}
 	publish_info, err := json.Marshal(msg)
 	if err != nil {
 		log.Warnf("Publish Marshal msg error,err = %v,msg = %+v", err, msg)
 		return
 	}
-	err := Channel.Publish(exchangeName, routingKey, false, false, amqp.Publishing{
+	err = Channel.Publish(exchangeName, routingKey, false, false, amqp.Publishing{
 		ContentType:  "text/plain",
 		DeliveryMode: 2,
 		Body:         publish_info,
@@ -54,7 +54,7 @@ func MQStart(exchangeName, routingKey string) {
 	deadExchangeName := "dead.exchange"
 	deadQueueName := "dead.queue"
 	deadRoutingKey := "dead.routingKey"
-	queueName := "queue"
+	queueName := "putong.queue"
 	//死信
 	err := Channel.ExchangeDeclare(deadExchangeName, "direct", true, false, false, false, nil)
 	if err != nil {
@@ -90,11 +90,11 @@ func MQStart(exchangeName, routingKey string) {
 func Connect() {
 	log.Info("Connect 开始连接")
 	var err error
-	username := ""
-	password := ""
-	ip := ""
+	username := "guest"
+	password := "guest"
+	ip := "127.0.0.1"
 	port := "5672"
-	host := ""
+	host := "test_host"
 	mqUrl := "amqp://" + username + ":" + password + "@" + ip + ":" + port + "/" + host
 a:
 	Conn, err = amqp.Dial(mqUrl)

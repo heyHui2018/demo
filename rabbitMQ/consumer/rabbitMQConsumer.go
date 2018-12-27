@@ -1,4 +1,4 @@
-package demo
+package main
 
 import (
 	"sync"
@@ -14,8 +14,11 @@ var RangeWait *sync.WaitGroup
 var CloseWait *sync.WaitGroup
 
 func Consumer() {
-	queue := ""
-	rangeNum := 0
+	queue := "putong.queue"
+
+	MQStart(queue)
+
+	rangeNum := 1
 	if Channel == nil {
 		Connect()
 	}
@@ -45,6 +48,7 @@ func Consumer() {
 		RangeWait.Add(1)
 		go rangeChannel(msg)
 	}
+
 	RangeWait.Wait()
 
 	if Sign == true {
@@ -59,35 +63,35 @@ func Consumer() {
 	}
 }
 
-func rangeChannel(msg <-chan amqp.Delivery, downloadChanNum, i int) {
+func rangeChannel(msg <-chan amqp.Delivery) {
 	defer RangeWait.Done()
 	for m := range msg {
 		//do something
-		log.Infof("rangeChannel m = %v, type = %v,body = %v", m, m.Type, string(m.Body))
+		log.Infof("rangeChannel m = %+v, body = %v", m, string(m.Body))
 		//m.Reject(false)
-		m.Ack(false)
+		//m.Ack(false)
+		m.Reject(false)
 	}
 }
 
-func MQStart() {
+func MQStart(queueName string) {
 	Connect()
 
-	Exchange := ""
-	err = Channel.ExchangeDeclare(Exchange, "topic", true, false, false, false, nil)
+	Exchange := "putong.exchange"
+	err := Channel.ExchangeDeclare(Exchange, "direct", true, false, false, false, nil)
 	if nil != err {
 		log.Warnf("MQStart 初始化 Exchange:%v 出错,err = %v", Exchange, err)
 	}
 
-	Queue := ""
-	_, err = Channel.QueueDeclare(Queue, true, false, false, false, nil)
-	if err != nil {
-		log.Warnf("MQStart 初始化 Queue:%v 出错,err = %v", Queue, err)
-	}
+	//_, err = Channel.QueueDeclare(queueName, true, false, false, false, nil)
+	//if err != nil {
+	//	log.Warnf("MQStart 初始化 Queue:%v 出错,err = %v", queueName, err)
+	//}
 
-	routingKey := ""
-	err = Channel.QueueBind(Queue, routingKey, Exchange, false, nil)
+	routingKey := "putong.routingKey"
+	err = Channel.QueueBind(queueName, routingKey, Exchange, false, nil)
 	if err != nil {
-		log.Warnf("MQStart 绑定 %v 到 %v 出错,err = %v", Queue, Exchange, err)
+		log.Warnf("MQStart 绑定 %v 到 %v 出错,err = %v", queueName, Exchange, err)
 	}
 	log.Info("MQStart完成")
 }
@@ -95,11 +99,11 @@ func MQStart() {
 func Connect() {
 	log.Info("Connect 开始连接")
 	var err error
-	username := ""
-	password := ""
-	ip := ""
+	username := "guest"
+	password := "guest"
+	ip := "127.0.0.1"
 	port := "5672"
-	host := ""
+	host := "test_host"
 	mqUrl := "amqp://" + username + ":" + password + "@" + ip + ":" + port + "/" + host
 a:
 	Conn, err = amqp.Dial(mqUrl)
@@ -122,6 +126,6 @@ a:
 func main() {
 	CloseWait = new(sync.WaitGroup)
 	CloseWait.Add(1)
-	MQConsumer()
+	Consumer()
 	CloseWait.Wait()
 }

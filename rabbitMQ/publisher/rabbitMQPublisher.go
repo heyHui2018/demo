@@ -1,4 +1,4 @@
-package demo
+package main
 
 import (
 	"time"
@@ -10,11 +10,12 @@ import (
 var Conn *amqp.Connection
 var Channel *amqp.Channel
 
-func Publish() {
+func main() {
 	MQStart()
+
 	msg := `{"msg":"hello world!"}`
-	exchange := ""
-	routingKey := ""
+	exchange := "direct_exchange"
+	routingKey := "test_routing_key"
 
 	retryCount := 0
 retry:
@@ -23,10 +24,10 @@ retry:
 	}
 	publishInfo, err := json.Marshal(msg)
 	if err != nil {
-		log.Warnf("Publish Marshal error,err = %v", err)
+		log.Warnf("main Marshal error,err = %v", err)
 		return
 	}
-	err := Channel.Publish(exchange, routingKey, false, false, amqp.Publishing{
+	err = Channel.Publish(exchange, routingKey, false, false, amqp.Publishing{
 		ContentType: "text/plain",
 		//DeliveryMode: 2,
 		//exchange/queue均为durable时，在此设置DeliveryMode为2即可持久化数据
@@ -52,8 +53,8 @@ retry:
 func MQStart() {
 	Connect()
 
-	Exchange := ""
-	err = Channel.ExchangeDeclare(Exchange, "topic", true, false, false, false, nil)
+	Exchange := "direct_exchange"
+	err := Channel.ExchangeDeclare(Exchange, "direct", true, false, false, false, nil)
 	if nil != err {
 		log.Warnf("MQStart 初始化 Exchange:%v 出错,err = %v", Exchange, err)
 	}
@@ -64,11 +65,11 @@ func MQStart() {
 func Connect() {
 	log.Info("Connect 开始连接")
 	var err error
-	username := ""
-	password := ""
-	ip := ""
+	username := "guest"
+	password := "guest"
+	ip := "127.0.0.1"
 	port := "5672"
-	host := ""
+	host := "test_host"
 	mqUrl := "amqp://" + username + ":" + password + "@" + ip + ":" + port + "/" + host
 a:
 	Conn, err = amqp.Dial(mqUrl)

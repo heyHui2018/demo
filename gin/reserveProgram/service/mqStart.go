@@ -1,7 +1,7 @@
 package service
 
 import (
-	"github.com/heyHui2018/demo/ginDemo/reserveProgram/base"
+	"github.com/heyHui2018/demo/gin/reserveProgram/base"
 	"github.com/ngaut/log"
 	"sync"
 )

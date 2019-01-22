@@ -1,9 +1,9 @@
 package routers
 
 import (
-	"github.com/heyHui2018/demo/ginDemo/reserveProgram/middleWare"
-	"github.com/heyHui2018/demo/ginDemo/reserveProgram/controller"
-	"github.com/heyHui2018/demo/ginDemo/reserveProgram/base"
+	"github.com/heyHui2018/demo/gin/reserveProgram/middleWare"
+	"github.com/heyHui2018/demo/gin/reserveProgram/controller"
+	"github.com/heyHui2018/demo/gin/reserveProgram/base"
 	"github.com/gin-gonic/gin"
 )
 

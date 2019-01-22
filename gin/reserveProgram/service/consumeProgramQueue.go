@@ -1,9 +1,9 @@
 package service
 
 import (
-	"github.com/heyHui2018/demo/ginDemo/reserveProgram/models"
-	"github.com/heyHui2018/demo/ginDemo/reserveProgram/utils"
-	"github.com/heyHui2018/demo/ginDemo/reserveProgram/base"
+	"github.com/heyHui2018/demo/gin/reserveProgram/models"
+	"github.com/heyHui2018/demo/gin/reserveProgram/utils"
+	"github.com/heyHui2018/demo/gin/reserveProgram/base"
 	"github.com/streadway/amqp"
 	"github.com/ngaut/log"
 	"encoding/json"

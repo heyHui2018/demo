@@ -1,9 +1,9 @@
 package main
 
 import (
-	"github.com/heyHui2018/demo/ginDemo/reserveProgram/service"
-	"github.com/heyHui2018/demo/ginDemo/reserveProgram/routers"
-	"github.com/heyHui2018/demo/ginDemo/reserveProgram/base"
+	"github.com/heyHui2018/demo/gin/reserveProgram/service"
+	"github.com/heyHui2018/demo/gin/reserveProgram/routers"
+	"github.com/heyHui2018/demo/gin/reserveProgram/base"
 	"github.com/ngaut/log"
 	"os/signal"
 	"net/http"

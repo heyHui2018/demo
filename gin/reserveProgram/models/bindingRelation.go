@@ -1,7 +1,7 @@
 package models
 
 import (
-	"github.com/heyHui2018/demo/ginDemo/reserveProgram/base"
+	"github.com/heyHui2018/demo/gin/reserveProgram/base"
 	"time"
 )
 

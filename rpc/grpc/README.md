@@ -1,7 +1,12 @@
 ###1、.proto 文件生成 .pb.go 文件命令
 ```
 protoc -I . --go_out=plugins=grpc:. route_guide.proto
+或
+protoc -I proto/ proto/order.proto --go_out=plugins=grpc:order
 ```
+* --go_out用于指定生成源码的保存路径
+* -I是-IPATH的简写，用于指定查找import文件的路径，可以指定多个
+* 最后的order是编译的grpc文件的存储路径。
 
 ###2、.proto 文件内容定义
 ```
@@ -33,6 +38,7 @@ message UserResponse {
     repeated string title = 4;	// repeated 修饰符表示字段是可变数组，即 slice 类型
 }
 ```
+更多字段类型可参考：https://colobu.com/2015/01/07/Protobuf-language-guide/#%E6%A0%87%E9%87%8F%E6%95%B0%E5%80%BC%E7%B1%BB%E5%9E%8B
 
 ###3、.pb.go 文件内容说明
 ```

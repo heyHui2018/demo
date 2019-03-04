@@ -1,10 +1,10 @@
 package base
 
 import (
-	"github.com/streadway/amqp"
 	"github.com/ngaut/log"
-	"time"
+	"github.com/streadway/amqp"
 	"sync"
+	"time"
 )
 
 var MQWait *sync.WaitGroup

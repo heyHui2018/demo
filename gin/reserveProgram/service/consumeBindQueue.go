@@ -1,12 +1,12 @@
 package service
 
 import (
+	"encoding/json"
+	"github.com/heyHui2018/demo/gin/reserveProgram/base"
 	"github.com/heyHui2018/demo/gin/reserveProgram/models"
 	"github.com/heyHui2018/demo/gin/reserveProgram/utils"
-	"github.com/heyHui2018/demo/gin/reserveProgram/base"
-	"github.com/streadway/amqp"
 	"github.com/ngaut/log"
-	"encoding/json"
+	"github.com/streadway/amqp"
 	"sync"
 	"time"
 )
@@ -74,13 +74,13 @@ func rangeBindChannel(msg <-chan amqp.Delivery) {
 			bindingLog := new(models.BindingLog)
 			bindingLog.MoretvId = binding.MoretvId
 			bindingLog.OpenId = binding.OpenId
-			//查询moretvid是否已被绑定
+			// 查询moretvid是否已被绑定
 			queryBR2, err := bindingRelation.QueryByMoretvId()
 			if err != nil {
 				log.Warnf("rangeBindChannel Query bindingRelation error,processId = %v,err = %v", processId, err)
 			} else {
 				if queryBR2.Id != 0 && queryBR2.OpenId != binding.OpenId {
-					//moretvid已被绑定
+					// moretvid已被绑定
 					bindingLog.BindStatus = -1
 					bindingLog.InsertBindingLog()
 					bindingRelation.BindStatus = -1
@@ -89,7 +89,7 @@ func rangeBindChannel(msg <-chan amqp.Delivery) {
 						log.Warnf("rangeBindChannel UpdateBindStatusByUniqueKey error,processId = %v,err = %v", processId, err)
 					}
 				} else {
-					//未被绑定
+					// 未被绑定
 					bindingLog.BindStatus = 1
 					bindingRelation.BindStatus = 1
 					queryBR, err := bindingRelation.QueryByUniqueKey()

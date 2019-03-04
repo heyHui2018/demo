@@ -1,10 +1,10 @@
 package base
 
 import (
+	"fmt"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/go-xorm/xorm"
 	"github.com/ngaut/log"
-	"fmt"
 )
 
 var DBEngine *xorm.Engine
@@ -24,5 +24,5 @@ func DbInit() {
 	log.Infof("初始化DB完成,host = %v,username = %v,database = %v", host, username, database)
 	DBEngine.SetMaxOpenConns(GetConfig().DB.MaxOpenConn)
 	DBEngine.SetMaxIdleConns(GetConfig().DB.MaxIdleConn)
-	//DB.ShowSQL()
+	// DB.ShowSQL()
 }

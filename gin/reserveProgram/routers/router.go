@@ -1,15 +1,15 @@
 package routers
 
 import (
-	"github.com/heyHui2018/demo/gin/reserveProgram/middleWare"
-	"github.com/heyHui2018/demo/gin/reserveProgram/controller"
-	"github.com/heyHui2018/demo/gin/reserveProgram/base"
 	"github.com/gin-gonic/gin"
+	"github.com/heyHui2018/demo/gin/reserveProgram/base"
+	"github.com/heyHui2018/demo/gin/reserveProgram/controller"
+	"github.com/heyHui2018/demo/gin/reserveProgram/middleWare"
 )
 
 func InitRouter() *gin.Engine {
 	r := gin.New()
-	r.Use(gin.Logger())
+	// r.Use(gin.Logger())
 	r.Use(gin.Recovery())
 	gin.SetMode(base.GetConfig().Server.RunMode)
 

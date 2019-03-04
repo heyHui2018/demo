@@ -10,7 +10,7 @@ func GetConfig() *tomlConfig {
 	return _config
 }
 
-//此struct存放各标题字段
+// 此struct存放各标题字段
 type tomlConfig struct {
 	Server Server
 	Log    Log

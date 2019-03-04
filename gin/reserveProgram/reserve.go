@@ -1,38 +1,37 @@
 package main
 
 import (
-	"github.com/heyHui2018/demo/gin/reserveProgram/service"
-	"github.com/heyHui2018/demo/gin/reserveProgram/routers"
-	"github.com/heyHui2018/demo/gin/reserveProgram/base"
-	"github.com/ngaut/log"
-	"os/signal"
-	"net/http"
-	"syscall"
 	"fmt"
+	"github.com/heyHui2018/demo/gin/reserveProgram/base"
+	"github.com/heyHui2018/demo/gin/reserveProgram/routers"
+	"github.com/heyHui2018/demo/gin/reserveProgram/service"
+	"github.com/ngaut/log"
+	"net/http"
 	"os"
+	"os/signal"
+	"syscall"
 )
 
 func main() {
 	base.ConfigInit()
 	base.LogInit()
 	base.DbInit()
-	//go service.InformStart()
+	// go service.InformStart()
 	service.MQStart()
-	//service.TimedTask()
-	//toolbox.StartTask()
-	//go service.Monitor()
-	//go beego.Run()
+	// service.TimedTask()
+	// toolbox.StartTask()
+	// go service.Monitor()
 
 	routersInit := routers.InitRouter()
 	httpPort := fmt.Sprintf(":%d", base.GetConfig().Server.HttpPort)
-	//readTimeout := base.GetConfig().Server.ReadTimeout
-	//writeTimeout := base.GetConfig().Server.WriteTimeout
+	// readTimeout := base.GetConfig().Server.ReadTimeout
+	// writeTimeout := base.GetConfig().Server.WriteTimeout
 
 	server := &http.Server{
-		Addr:         httpPort,
-		Handler:      routersInit,
-		//ReadTimeout:  time.Duration(readTimeout),
-		//WriteTimeout: time.Duration(writeTimeout),
+		Addr:    httpPort,
+		Handler: routersInit,
+		// ReadTimeout:  time.Duration(readTimeout),
+		// WriteTimeout: time.Duration(writeTimeout),
 	}
 	log.Infof("start listening on %s", httpPort)
 	go server.ListenAndServe()

@@ -36,6 +36,7 @@ message UserResponse {
     string name = 2;
     int32 age = 3;
     repeated string title = 4;	// repeated 修饰符表示字段是可变数组，即 slice 类型
+    (required表示该字段值是必须设置的;optional表示该字段的值可以存在,也可以为空)
 }
 ```
 更多字段类型可参考：https://colobu.com/2015/01/07/Protobuf-language-guide/#%E6%A0%87%E9%87%8F%E6%95%B0%E5%80%BC%E7%B1%BB%E5%9E%8B
@@ -87,3 +88,17 @@ func RegisterUserInfoServiceServer(s *grpc.Server, srv UserInfoServiceServer) {
 // 处理请求
 func _UserInfoService_GetUserInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {...}
 ```
+
+###4、message更新规则
+* 不可更改已存在域中的标识号
+* 所有新增的域必须是optional或repeated
+* 非required域可以被删除,但这些被删除域的标识号不可再被使用
+* 非required域可以被转化,转化时可能发生扩展或截断,此时标识号和名称均不变
+* sint32和sint64是互相兼容的
+* fixed32兼容sfixed32,fixed64兼容sfixed64
+* optional兼容repeated,发送端发送repeated域,用户使用optional域读取,将会读取repeated域的最后一个元素
+
+###5、序列化原理
+Varint：是一种紧凑的数字表示方法,用一个或多个字节来完成,值越小的数字用的字节数越少.
+其中每个byte的最高位有特殊的含义,若为1,表示后续的字节也是该数字的一部分,若为0,则结束,其余7为用来表示数字.
+(未完)

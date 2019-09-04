@@ -1,10 +1,10 @@
 package main
 
 import (
-	"sync"
-	"time"
 	"github.com/ngaut/log"
 	"github.com/streadway/amqp"
+	"sync"
+	"time"
 )
 
 var Channel *amqp.Channel
@@ -28,6 +28,7 @@ func Consumer() {
 		Channel.Close()
 		Channel = nil
 		Conn.Close()
+		CloseWait.Done()
 		time.Sleep(3 * time.Second)
 		go Consumer()
 		return
@@ -38,7 +39,9 @@ func Consumer() {
 		Channel.Close()
 		Channel = nil
 		Conn.Close()
+		CloseWait.Done()
 		time.Sleep(3 * time.Second)
+		// 因queue被删除会导致在次循环出错,故此出错重试逻辑需能重建exchange及queue及bind,此例中Consumer()会调用MQStart(queue),满足此要求
 		go Consumer()
 		return
 	}
@@ -66,10 +69,10 @@ func Consumer() {
 func rangeChannel(msg <-chan amqp.Delivery) {
 	defer RangeWait.Done()
 	for m := range msg {
-		//do something
+		// do something
 		log.Infof("rangeChannel m = %+v, body = %v", m, string(m.Body))
-		//m.Reject(false)
-		//m.Ack(false)
+		// m.Reject(false)
+		// m.Ack(false)
 		m.Reject(false)
 	}
 }
@@ -83,10 +86,10 @@ func MQStart(queueName string) {
 		log.Warnf("MQStart 初始化 Exchange:%v 出错,err = %v", Exchange, err)
 	}
 
-	//_, err = Channel.QueueDeclare(queueName, true, false, false, false, nil)
-	//if err != nil {
-	//	log.Warnf("MQStart 初始化 Queue:%v 出错,err = %v", queueName, err)
-	//}
+	// _, err = Channel.QueueDeclare(queueName, true, false, false, false, nil)
+	// if err != nil {
+	// 	log.Warnf("MQStart 初始化 Queue:%v 出错,err = %v", queueName, err)
+	// }
 
 	routingKey := "putong.routingKey"
 	err = Channel.QueueBind(queueName, routingKey, Exchange, false, nil)

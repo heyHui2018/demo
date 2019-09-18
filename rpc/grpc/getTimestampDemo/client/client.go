@@ -1,15 +1,15 @@
 package main
 
 import (
-	"time"
 	"context"
+	"github.com/heyHui2018/best-practise/pb"
 	"github.com/ngaut/log"
 	"google.golang.org/grpc"
-	pb "github.com/heyHui2018/demo/rpc/grpc/getTimestampDemo"
+	"time"
 )
 
 const (
-	address = "localhost:8889"
+	address = "localhost:8667"
 )
 
 func main() {
